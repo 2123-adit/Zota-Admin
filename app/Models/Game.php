@@ -1,5 +1,5 @@
 <?php
-
+// C:\laragon\www\zota-admin\app\Models\Game.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
