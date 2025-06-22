@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Dashboard - ZOTA Admin')
-@section('page-title', 'Command Center')
+@section('page-title', 'Pusat Kendali')
 
 @push('styles')
 <style>
@@ -33,7 +33,7 @@
         text-shadow: 0 0 5px rgba(80, 255, 120, 0.3);
     }
 
-    /* Gaming Stats Cards */
+    /* Kartu Statistik Gaming */
     .stat-card {
         background: linear-gradient(135deg, rgba(255, 80, 120, 0.1) 0%, rgba(120, 80, 255, 0.1) 100%);
         border: 2px solid rgba(255, 255, 255, 0.1);
@@ -119,7 +119,7 @@
         font-weight: 500;
     }
 
-    /* Gaming Table */
+    /* Tabel Gaming */
     .gaming-table {
         background: rgba(10, 10, 15, 0.8);
         border: 2px solid rgba(255, 255, 255, 0.1);
@@ -218,7 +218,7 @@
         box-shadow: 0 0 10px rgba(120, 80, 255, 0.3);
     }
 
-    /* Top Games Card */
+    /* Kartu Game Terpopuler */
     .top-games-card {
         background: rgba(10, 10, 15, 0.8);
         border: 2px solid rgba(255, 255, 255, 0.1);
@@ -271,7 +271,7 @@
         border-radius: 4px;
     }
 
-    /* Loading Animation */
+    /* Animasi Loading */
     @keyframes pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.5; }
@@ -281,7 +281,7 @@
         animation: pulse 2s infinite;
     }
 
-    /* Responsive */
+    /* Responsif */
     @media (max-width: 768px) {
         .stat-number {
             font-size: 2rem;
@@ -296,15 +296,15 @@
 
 @section('content')
 <div class="row g-4">
-    <!-- Statistics Cards -->
+    <!-- Kartu Statistik -->
     <div class="col-xl-3 col-md-6">
         <div class="card stat-card users">
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <div class="stat-label">Total Users</div>
+                        <div class="stat-label">Total Pengguna</div>
                         <h2 class="stat-number">{{ number_format($stats['total_users']) }}</h2>
-                        <div class="stat-subtitle">{{ $stats['active_users'] }} active players</div>
+                        <div class="stat-subtitle">{{ $stats['active_users'] }} pemain aktif</div>
                     </div>
                     <div class="stat-icon">
                         <i class="fas fa-users"></i>
@@ -319,9 +319,9 @@
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <div class="stat-label">Active Games</div>
+                        <div class="stat-label">Game Aktif</div>
                         <h2 class="stat-number">{{ number_format($stats['total_games']) }}</h2>
-                        <div class="stat-subtitle">Ready to play</div>
+                        <div class="stat-subtitle">Siap dimainkan</div>
                     </div>
                     <div class="stat-icon">
                         <i class="fas fa-gamepad"></i>
@@ -336,9 +336,9 @@
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <div class="stat-label">Pending Top-ups</div>
+                        <div class="stat-label">Top-up Tertunda</div>
                         <h2 class="stat-number">{{ number_format($stats['pending_topups']) }}</h2>
-                        <div class="stat-subtitle">Need approval</div>
+                        <div class="stat-subtitle">Perlu persetujuan</div>
                     </div>
                     <div class="stat-icon">
                         <i class="fas fa-credit-card"></i>
@@ -353,7 +353,7 @@
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <div class="stat-label">Today's Revenue</div>
+                        <div class="stat-label">Pendapatan Hari Ini</div>
                         <h2 class="stat-number">{{ number_format($stats['today_sales']/1000, 0) }}K</h2>
                         <div class="stat-subtitle">Rp {{ number_format($stats['total_sales'], 0, ',', '.') }} total</div>
                     </div>
@@ -367,12 +367,12 @@
 </div>
 
 <div class="row g-4 mt-3">
-    <!-- Recent Transactions -->
+    <!-- Transaksi Terbaru -->
     <div class="col-lg-8">
         <div class="card gaming-table">
             <div class="card-header">
                 <h5 class="card-title">
-                    <i class="fas fa-exchange-alt me-2"></i>Recent Transactions
+                    <i class="fas fa-exchange-alt me-2"></i>Transaksi Terbaru
                 </h5>
             </div>
             <div class="card-body p-0">
@@ -380,11 +380,11 @@
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th>Player</th>
-                                <th>Action</th>
-                                <th>Amount</th>
+                                <th>Pemain</th>
+                                <th>Aksi</th>
+                                <th>Jumlah</th>
                                 <th>Status</th>
-                                <th>Timestamp</th>
+                                <th>Waktu</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -404,7 +404,7 @@
                                 <td>
                                     @if($transaction->type === 'purchase')
                                         <span class="badge bg-success">
-                                            <i class="fas fa-shopping-cart me-1"></i>Purchase
+                                            <i class="fas fa-shopping-cart me-1"></i>Pembelian
                                         </span>
                                         <br><small class="text-muted">{{ $transaction->game->name ?? 'N/A' }}</small>
                                     @else
@@ -421,11 +421,11 @@
                                 <td>
                                     @if($transaction->status === 'completed')
                                         <span class="badge bg-success">
-                                            <i class="fas fa-check me-1"></i>Completed
+                                            <i class="fas fa-check me-1"></i>Selesai
                                         </span>
                                     @elseif($transaction->status === 'pending')
                                         <span class="badge bg-warning">
-                                            <i class="fas fa-clock me-1"></i>Pending
+                                            <i class="fas fa-clock me-1"></i>Tertunda
                                         </span>
                                     @else
                                         <span class="badge bg-danger">
@@ -446,12 +446,12 @@
         </div>
     </div>
 
-    <!-- Top Games -->
+    <!-- Game Terpopuler -->
     <div class="col-lg-4">
         <div class="card top-games-card">
             <div class="card-header">
                 <h5 class="card-title" style="color: #fff; font-family: 'Orbitron', monospace;">
-                    <i class="fas fa-trophy me-2" style="color: #ffc850;"></i>Top Games
+                    <i class="fas fa-trophy me-2" style="color: #ffc850;"></i>Game Terpopuler
                 </h5>
             </div>
             <div class="card-body">
@@ -468,7 +468,7 @@
                                 <h6 class="mb-1">{{ $game->name }}</h6>
                                 <small class="text-muted">
                                     <i class="fas fa-fire me-1" style="color: #ff5078;"></i>
-                                    {{ $game->transactions_count }} sales
+                                    {{ $game->transactions_count }} penjualan
                                 </small>
                             </div>
                         </div>
@@ -489,7 +489,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Live Clock Update
+    // Pembaruan Jam Langsung
     function updateClock() {
         const now = new Date();
         const options = {
@@ -503,24 +503,24 @@ document.addEventListener('DOMContentLoaded', function() {
             hour12: false
         };
         
-        const timeString = now.toLocaleDateString('en-US', options);
+        const timeString = now.toLocaleDateString('id-ID', options);
         const clockElement = document.querySelector('.live-clock');
         if (clockElement) {
             clockElement.innerHTML = `<i class="fas fa-clock me-1"></i>${timeString}`;
         }
     }
 
-    // Update clock immediately and then every second
+    // Perbarui jam segera dan kemudian setiap detik
     updateClock();
     setInterval(updateClock, 1000);
 
-    // Add pulse animation to pending items
+    // Tambahkan animasi pulse pada item tertunda
     const pendingBadges = document.querySelectorAll('.badge.bg-warning');
     pendingBadges.forEach(badge => {
         badge.classList.add('pulse');
     });
 
-    // Add hover effects to stat cards
+    // Tambahkan efek hover pada kartu statistik
     const statCards = document.querySelectorAll('.stat-card');
     statCards.forEach(card => {
         card.addEventListener('mouseenter', function() {
@@ -532,7 +532,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Smooth number counter animation (optional)
+    // Animasi penghitung angka yang halus (opsional)
     const numbers = document.querySelectorAll('.stat-number');
     numbers.forEach(number => {
         const target = parseInt(number.textContent.replace(/,/g, ''));

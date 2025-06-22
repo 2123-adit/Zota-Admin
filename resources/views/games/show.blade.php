@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Game Details - ZOTA Admin')
-@section('page-title', 'Game Details')
+@section('title', 'Detail Game - ZOTA Admin')
+@section('page-title', 'Detail Game')
 
 @section('content')
 <div class="row">
@@ -14,12 +14,12 @@
                     </h5>
                     <div>
                         @if($game->is_featured)
-                            <span class="badge bg-warning text-dark me-2">Featured</span>
+                            <span class="badge bg-warning text-dark me-2">Unggulan</span>
                         @endif
                         @if($game->is_active)
-                            <span class="badge bg-success">Active</span>
+                            <span class="badge bg-success">Aktif</span>
                         @else
-                            <span class="badge bg-danger">Inactive</span>
+                            <span class="badge bg-danger">Tidak Aktif</span>
                         @endif
                     </div>
                 </div>
@@ -34,25 +34,25 @@
 
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <h6>Category</h6>
+                        <h6>Kategori</h6>
                         <p class="text-muted">{{ $game->category->name }}</p>
                     </div>
                     <div class="col-md-6">
-                        <h6>Price</h6>
+                        <h6>Harga</h6>
                         <p class="text-success fw-bold fs-5">Rp {{ number_format($game->price, 0, ',', '.') }}</p>
                     </div>
                 </div>
 
                 @if($game->description)
                 <div class="mb-4">
-                    <h6>Description</h6>
+                    <h6>Deskripsi</h6>
                     <p class="text-muted">{{ $game->description }}</p>
                 </div>
                 @endif
 
                 @if($game->screenshots)
                 <div class="mb-4">
-                    <h6>Screenshots</h6>
+                    <h6>Screenshot</h6>
                     <div class="row">
                         @foreach($game->screenshots_url as $screenshot)
                         <div class="col-md-4 mb-3">
@@ -70,7 +70,7 @@
                         <i class="fas fa-edit me-2"></i>Edit Game
                     </a>
                     <a href="{{ route('games.index') }}" class="btn btn-secondary btn-modern">
-                        <i class="fas fa-arrow-left me-2"></i>Back to Games
+                        <i class="fas fa-arrow-left me-2"></i>Kembali ke Daftar Game
                     </a>
                 </div>
             </div>
@@ -81,30 +81,30 @@
         <div class="card">
             <div class="card-header bg-white border-0">
                 <h5 class="card-title mb-0">
-                    <i class="fas fa-chart-bar me-2 text-info"></i>Game Statistics
+                    <i class="fas fa-chart-bar me-2 text-info"></i>Statistik Game
                 </h5>
             </div>
             <div class="card-body">
                 <div class="text-center mb-3">
                     <h3 class="text-primary">{{ $game->transactions_count }}</h3>
-                    <small class="text-muted">Total Sales</small>
+                    <small class="text-muted">Total Penjualan</small>
                 </div>
                 <div class="text-center mb-3">
                     <h3 class="text-success">Rp {{ number_format($game->transactions_count * $game->price, 0, ',', '.') }}</h3>
-                    <small class="text-muted">Total Revenue</small>
+                    <small class="text-muted">Total Pendapatan</small>
                 </div>
                 <div class="text-center">
-                    <small class="text-muted">Created: {{ $game->created_at->format('d M Y') }}</small>
+                    <small class="text-muted">Dibuat: {{ $game->created_at->format('d M Y') }}</small>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Buyers -->
+        <!-- Pembeli Terbaru -->
         @if($game->transactions->count() > 0)
         <div class="card mt-4">
             <div class="card-header bg-white border-0">
                 <h5 class="card-title mb-0">
-                    <i class="fas fa-users me-2 text-success"></i>Recent Buyers
+                    <i class="fas fa-users me-2 text-success"></i>Pembeli Terbaru
                 </h5>
             </div>
             <div class="card-body">
@@ -126,7 +126,7 @@
     </div>
 </div>
 
-<!-- Screenshot Modal -->
+<!-- Modal Screenshot -->
 <div class="modal fade" id="screenshotModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

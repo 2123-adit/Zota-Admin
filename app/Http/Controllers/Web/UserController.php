@@ -14,15 +14,22 @@ class UserController extends Controller
     {
         $query = User::query();
 
-        if ($request->has('search')) {
+        // Perbaikan: gunakan filled() untuk memastikan parameter tidak kosong
+        if ($request->filled('search')) {
             $query->where(function($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%')
                   ->orWhere('email', 'like', '%' . $request->search . '%');
             });
         }
 
-        if ($request->has('status')) {
-            $query->where('is_active', $request->status === 'active');
+        // Perbaikan: gunakan filled() dan cek nilai yang tepat
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+            // Jika status kosong atau "All Status", tidak ada filter yang diterapkan
         }
 
         $users = $query->withCount(['transactions', 'userGames'])
@@ -45,9 +52,9 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->update(['is_active' => !$user->is_active]);
 
-        $status = $user->is_active ? 'activated' : 'suspended';
+        $status = $user->is_active ? 'diaktifkan' : 'diblokir';
         
-        return redirect()->back()->with('success', "User {$status} successfully");
+        return redirect()->back()->with('success', "Pengguna berhasil {$status}");
     }
 
     public function adjustBalance(Request $request, $id)
@@ -67,7 +74,7 @@ class UserController extends Controller
                 $message = "Saldo Anda telah ditambahkan sebesar Rp " . number_format($request->amount, 0, ',', '.');
             } else {
                 if ($user->balance < $request->amount) {
-                    return redirect()->back()->with('error', 'Insufficient balance');
+                    return redirect()->back()->with('error', 'Saldo tidak mencukupi');
                 }
                 $user->deductBalance($request->amount);
                 $message = "Saldo Anda telah dikurangi sebesar Rp " . number_format($request->amount, 0, ',', '.');
@@ -87,11 +94,11 @@ class UserController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->back()->with('success', 'Balance adjusted successfully');
+            return redirect()->back()->with('success', 'Saldo berhasil disesuaikan');
 
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Failed to adjust balance');
+            return redirect()->back()->with('error', 'Gagal menyesuaikan saldo');
         }
     }
 }

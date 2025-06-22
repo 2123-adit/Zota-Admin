@@ -16,32 +16,84 @@ class GameController extends Controller
     {
         $query = Game::with('category');
 
-        if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+        // Fitur pencarian berdasarkan nama game
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
         }
 
-        if ($request->has('category_id')) {
+        // Filter berdasarkan kategori
+        if ($request->filled('category_id') && $request->category_id != '') {
             $query->where('category_id', $request->category_id);
         }
 
-        if ($request->has('status')) {
-            $query->where('is_active', $request->status === 'active');
+        // Filter berdasarkan status
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+            // Jika 'all', tidak ada filter yang diterapkan
         }
 
-        $games = $query->withCount(['transactions' => function($q) {
-                      $q->where('status', 'completed');
-                  }])
-                  ->orderBy('created_at', 'desc')
-                  ->paginate(20);
+        // Filter berdasarkan featured
+        if ($request->filled('featured')) {
+            if ($request->featured === 'yes') {
+                $query->where('is_featured', true);
+            } elseif ($request->featured === 'no') {
+                $query->where('is_featured', false);
+            }
+        }
 
-        $categories = Category::where('is_active', true)->get();
+        // Filter berdasarkan harga
+        if ($request->filled('price_min')) {
+            $query->where('price', '>=', $request->price_min);
+        }
+
+        if ($request->filled('price_max')) {
+            $query->where('price', '<=', $request->price_max);
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        $allowedSorts = ['created_at', 'name', 'price', 'transactions_count'];
+        if (in_array($sortBy, $allowedSorts)) {
+            if ($sortBy === 'transactions_count') {
+                // Untuk sorting berdasarkan jumlah transaksi, perlu special handling
+                $query->withCount(['transactions' => function($q) {
+                    $q->where('status', 'completed');
+                }])->orderBy('transactions_count', $sortOrder);
+            } else {
+                $query->orderBy($sortBy, $sortOrder);
+            }
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        // Jika tidak sorting berdasarkan transactions_count, tetap load count
+        if ($sortBy !== 'transactions_count') {
+            $query->withCount(['transactions' => function($q) {
+                $q->where('status', 'completed');
+            }]);
+        }
+
+        $games = $query->paginate(20);
+
+        // Load semua kategori untuk dropdown filter
+        $categories = Category::where('is_active', true)->orderBy('name')->get();
 
         return view('games.index', compact('games', 'categories'));
     }
 
     public function create()
     {
-        $categories = Category::where('is_active', true)->get();
+        $categories = Category::where('is_active', true)->orderBy('name')->get();
         return view('games.create', compact('categories'));
     }
 
@@ -103,10 +155,10 @@ class GameController extends Controller
 
             Log::info('Game saved successfully with ID:', ['id' => $game->id]);
 
-            return redirect()->route('games.index')->with('success', 'Game created successfully');
+            return redirect()->route('games.index')->with('success', 'Game berhasil dibuat');
         } catch (\Exception $e) {
             Log::error('Error storing game:', ['error' => $e->getMessage()]);
-            return back()->withInput()->withErrors(['error' => 'Failed to create game: ' . $e->getMessage()]);
+            return back()->withInput()->withErrors(['error' => 'Gagal membuat game: ' . $e->getMessage()]);
         }
     }
 
@@ -124,7 +176,7 @@ class GameController extends Controller
     public function edit($id)
     {
         $game = Game::findOrFail($id);
-        $categories = Category::where('is_active', true)->get();
+        $categories = Category::where('is_active', true)->orderBy('name')->get();
         return view('games.edit', compact('game', 'categories'));
     }
 
@@ -187,10 +239,10 @@ class GameController extends Controller
 
             $game->save();
 
-            return redirect()->route('games.index')->with('success', 'Game updated successfully');
+            return redirect()->route('games.index')->with('success', 'Game berhasil diperbarui');
         } catch (\Exception $e) {
             Log::error('Error updating game:', ['error' => $e->getMessage()]);
-            return back()->withInput()->withErrors(['error' => 'Failed to update game: ' . $e->getMessage()]);
+            return back()->withInput()->withErrors(['error' => 'Gagal memperbarui game: ' . $e->getMessage()]);
         }
     }
 
@@ -199,10 +251,18 @@ class GameController extends Controller
         try {
             $game = Game::findOrFail($id);
 
+            // Cek apakah game memiliki transaksi
+            $transactionCount = $game->transactions()->count();
+            if ($transactionCount > 0) {
+                return back()->withErrors(['error' => 'Tidak dapat menghapus game yang sudah memiliki transaksi']);
+            }
+
+            // Hapus file cover image
             if ($game->cover_image && Storage::disk('public')->exists($game->cover_image)) {
                 Storage::disk('public')->delete($game->cover_image);
             }
 
+            // Hapus file screenshots
             if ($game->screenshots) {
                 foreach (json_decode($game->screenshots, true) as $screenshot) {
                     if (Storage::disk('public')->exists($screenshot)) {
@@ -213,10 +273,10 @@ class GameController extends Controller
 
             $game->delete();
 
-            return redirect()->route('games.index')->with('success', 'Game deleted successfully');
+            return redirect()->route('games.index')->with('success', 'Game berhasil dihapus');
         } catch (\Exception $e) {
             Log::error('Error deleting game:', ['error' => $e->getMessage()]);
-            return back()->withErrors(['error' => 'Failed to delete game: ' . $e->getMessage()]);
+            return back()->withErrors(['error' => 'Gagal menghapus game: ' . $e->getMessage()]);
         }
     }
 }

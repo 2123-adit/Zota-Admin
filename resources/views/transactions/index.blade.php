@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Transactions - ZOTA Admin')
-@section('page-title', 'Transaction Monitoring')
+@section('title', 'Transaksi - ZOTA Admin')
+@section('page-title', 'Monitoring Transaksi')
 
 @section('content')
 <div class="row">
@@ -11,25 +11,25 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-exchange-alt me-2 text-primary"></i>All Transactions
+                            <i class="fas fa-exchange-alt me-2 text-primary"></i>Semua Transaksi
                         </h5>
                     </div>
                     <div class="col-auto">
                         <form method="GET" class="d-flex gap-2">
-                            <input type="text" name="search" class="form-control" placeholder="Search users..." value="{{ request('search') }}">
+                            <input type="text" name="search" class="form-control" placeholder="Cari pengguna..." value="{{ request('search') }}">
                             <select name="type" class="form-select">
-                                <option value="">All Types</option>
-                                <option value="purchase" {{ request('type') === 'purchase' ? 'selected' : '' }}>Purchase</option>
+                                <option value="">Semua Jenis</option>
+                                <option value="purchase" {{ request('type') === 'purchase' ? 'selected' : '' }}>Pembelian</option>
                                 <option value="topup" {{ request('type') === 'topup' ? 'selected' : '' }}>Top-up</option>
                             </select>
                             <select name="status" class="form-select">
-                                <option value="">All Status</option>
-                                <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed</option>
-                                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="failed" {{ request('status') === 'failed' ? 'selected' : '' }}>Failed</option>
+                                <option value="">Semua Status</option>
+                                <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Selesai</option>
+                                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Tertunda</option>
+                                <option value="failed" {{ request('status') === 'failed' ? 'selected' : '' }}>Gagal</option>
                             </select>
-                            <input type="date" name="date_from" class="form-control" value="{{ request('date_from') }}">
-                            <input type="date" name="date_to" class="form-control" value="{{ request('date_to') }}">
+                            <input type="date" name="date_from" class="form-control" value="{{ request('date_from') }}" title="Tanggal Mulai">
+                            <input type="date" name="date_to" class="form-control" value="{{ request('date_to') }}" title="Tanggal Akhir">
                             <button type="submit" class="btn btn-primary btn-modern">
                                 <i class="fas fa-search"></i>
                             </button>
@@ -42,13 +42,13 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Transaction ID</th>
-                                <th>User</th>
-                                <th>Type</th>
-                                <th>Amount</th>
+                                <th>ID Transaksi</th>
+                                <th>Pengguna</th>
+                                <th>Jenis</th>
+                                <th>Jumlah</th>
                                 <th>Status</th>
-                                <th>Date</th>
-                                <th>Actions</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,7 +68,7 @@
                                 </td>
                                 <td>
                                     @if($transaction->type === 'purchase')
-                                        <span class="badge bg-success">Purchase</span>
+                                        <span class="badge bg-success">Pembelian</span>
                                         @if($transaction->game)
                                             <br><small class="text-muted">{{ $transaction->game->name }}</small>
                                         @endif
@@ -79,11 +79,11 @@
                                 <td class="fw-bold text-success">Rp {{ number_format($transaction->amount, 0, ',', '.') }}</td>
                                 <td>
                                     @if($transaction->status === 'completed')
-                                        <span class="badge bg-success">Completed</span>
+                                        <span class="badge bg-success">Selesai</span>
                                     @elseif($transaction->status === 'pending')
-                                        <span class="badge bg-warning">Pending</span>
+                                        <span class="badge bg-warning">Tertunda</span>
                                     @elseif($transaction->status === 'failed')
-                                        <span class="badge bg-danger">Failed</span>
+                                        <span class="badge bg-danger">Gagal</span>
                                     @else
                                         <span class="badge bg-secondary">{{ ucfirst($transaction->status) }}</span>
                                     @endif

@@ -1,7 +1,8 @@
+<!-- C:\laragon\www\zota-admin\resources\views\users\index.blade.php -->
 @extends('layouts.app')
 
-@section('title', 'Users Management - ZOTA Admin')
-@section('page-title', 'Users Management')
+@section('title', 'Manajemen Pengguna - ZOTA Admin')
+@section('page-title', 'Manajemen Pengguna')
 
 @section('content')
 <div class="row">
@@ -11,16 +12,16 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-users me-2 text-primary"></i>All Users
+                            <i class="fas fa-users me-2 text-primary"></i>Semua Pengguna
                         </h5>
                     </div>
                     <div class="col-auto">
                         <form method="GET" class="d-flex gap-2">
-                            <input type="text" name="search" class="form-control" placeholder="Search users..." value="{{ request('search') }}">
+                            <input type="text" name="search" class="form-control" placeholder="Cari pengguna..." value="{{ request('search') }}">
                             <select name="status" class="form-select">
-                                <option value="">All Status</option>
-                                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                <option value="">Semua Status</option>
+                                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Aktif</option>
+                                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
                             </select>
                             <button type="submit" class="btn btn-primary btn-modern">
                                 <i class="fas fa-search"></i>
@@ -34,13 +35,13 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>User</th>
-                                <th>Balance</th>
-                                <th>Games</th>
-                                <th>Transactions</th>
+                                <th>Pengguna</th>
+                                <th>Saldo</th>
+                                <th>Game</th>
+                                <th>Transaksi</th>
                                 <th>Status</th>
-                                <th>Joined</th>
-                                <th>Actions</th>
+                                <th>Bergabung</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,9 +63,9 @@
                                 <td>{{ $user->transactions_count }}</td>
                                 <td>
                                     @if($user->is_active)
-                                        <span class="badge bg-success">Active</span>
+                                        <span class="badge bg-success">Aktif</span>
                                     @else
-                                        <span class="badge bg-danger">Suspended</span>
+                                        <span class="badge bg-danger">Diblokir</span>
                                     @endif
                                 </td>
                                 <td class="text-muted">{{ $user->created_at->format('d M Y') }}</td>
@@ -76,7 +77,7 @@
                                         <form method="POST" action="{{ route('users.toggle-status', $user->id) }}" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-sm {{ $user->is_active ? 'btn-outline-warning' : 'btn-outline-success' }}"
-                                                    onclick="return confirm('Are you sure?')">
+                                                    onclick="return confirm('Apakah Anda yakin?')">
                                                 <i class="fas {{ $user->is_active ? 'fa-ban' : 'fa-check' }}"></i>
                                             </button>
                                         </form>

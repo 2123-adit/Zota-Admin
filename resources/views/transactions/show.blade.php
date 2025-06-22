@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Transaction Details - ZOTA Admin')
-@section('page-title', 'Transaction Details')
+@section('title', 'Detail Transaksi - ZOTA Admin')
+@section('page-title', 'Detail Transaksi')
 
 @section('content')
 <div class="row justify-content-center">
@@ -10,15 +10,15 @@
             <div class="card-header bg-white border-0">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-receipt me-2 text-primary"></i>Transaction Details
+                        <i class="fas fa-receipt me-2 text-primary"></i>Detail Transaksi
                     </h5>
                     <div>
                         @if($transaction->status === 'completed')
-                            <span class="badge bg-success px-3 py-2">Completed</span>
+                            <span class="badge bg-success px-3 py-2">Selesai</span>
                         @elseif($transaction->status === 'pending')
-                            <span class="badge bg-warning px-3 py-2">Pending</span>
+                            <span class="badge bg-warning px-3 py-2">Tertunda</span>
                         @elseif($transaction->status === 'failed')
-                            <span class="badge bg-danger px-3 py-2">Failed</span>
+                            <span class="badge bg-danger px-3 py-2">Gagal</span>
                         @else
                             <span class="badge bg-secondary px-3 py-2">{{ ucfirst($transaction->status) }}</span>
                         @endif
@@ -29,47 +29,47 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-4">
-                            <h6>Transaction Information</h6>
+                            <h6>Informasi Transaksi</h6>
                             <table class="table table-borderless">
                                 <tr>
-                                    <td class="text-muted">Transaction ID:</td>
+                                    <td class="text-muted">ID Transaksi:</td>
                                     <td class="fw-bold">{{ $transaction->transaction_id }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="text-muted">Type:</td>
+                                    <td class="text-muted">Jenis:</td>
                                     <td>
                                         @if($transaction->type === 'purchase')
-                                            <span class="badge bg-success">Purchase</span>
+                                            <span class="badge bg-success">Pembelian</span>
                                         @else
                                             <span class="badge bg-info">Top-up</span>
                                         @endif
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-muted">Amount:</td>
+                                    <td class="text-muted">Jumlah:</td>
                                     <td class="fw-bold text-success">Rp {{ number_format($transaction->amount, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td class="text-muted">Status:</td>
                                     <td>
                                         @if($transaction->status === 'completed')
-                                            <span class="badge bg-success">Completed</span>
+                                            <span class="badge bg-success">Selesai</span>
                                         @elseif($transaction->status === 'pending')
-                                            <span class="badge bg-warning">Pending</span>
+                                            <span class="badge bg-warning">Tertunda</span>
                                         @elseif($transaction->status === 'failed')
-                                            <span class="badge bg-danger">Failed</span>
+                                            <span class="badge bg-danger">Gagal</span>
                                         @else
                                             <span class="badge bg-secondary">{{ ucfirst($transaction->status) }}</span>
                                         @endif
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-muted">Created At:</td>
+                                    <td class="text-muted">Dibuat Pada:</td>
                                     <td>{{ $transaction->created_at->format('d M Y H:i:s') }}</td>
                                 </tr>
                                 @if($transaction->processed_at)
                                 <tr>
-                                    <td class="text-muted">Processed At:</td>
+                                    <td class="text-muted">Diproses Pada:</td>
                                     <td>{{ $transaction->processed_at->format('d M Y H:i:s') }}</td>
                                 </tr>
                                 @endif
@@ -78,7 +78,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="mb-4">
-                            <h6>User Information</h6>
+                            <h6>Informasi Pengguna</h6>
                             <div class="d-flex align-items-center">
                                 <div class="avatar-lg bg-primary rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <h4 class="text-white mb-0">{{ substr($transaction->user->name, 0, 1) }}</h4>
@@ -86,7 +86,7 @@
                                 <div>
                                     <h5 class="mb-1">{{ $transaction->user->name }}</h5>
                                     <p class="text-muted mb-1">{{ $transaction->user->email }}</p>
-                                    <small class="text-muted">Current Balance: <span class="fw-bold text-success">Rp {{ number_format($transaction->user->balance, 0, ',', '.') }}</span></small>
+                                    <small class="text-muted">Saldo Saat Ini: <span class="fw-bold text-success">Rp {{ number_format($transaction->user->balance, 0, ',', '.') }}</span></small>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
 
                 @if($transaction->type === 'purchase' && $transaction->game)
                 <div class="mb-4">
-                    <h6>Game Information</h6>
+                    <h6>Informasi Game</h6>
                     <div class="d-flex align-items-center">
                         @if($transaction->game->cover_image)
                             <img src="{{ $transaction->game->cover_image_url }}" alt="{{ $transaction->game->name }}" 
@@ -117,7 +117,7 @@
 
                 @if($transaction->details)
                 <div class="mb-4">
-                    <h6>Transaction Details</h6>
+                    <h6>Detail Transaksi</h6>
                     <div class="bg-light p-3 rounded">
                         <pre class="mb-0">{{ json_encode($transaction->details, JSON_PRETTY_PRINT) }}</pre>
                     </div>
@@ -126,7 +126,7 @@
 
                 @if($transaction->notes)
                 <div class="mb-4">
-                    <h6>Notes</h6>
+                    <h6>Catatan</h6>
                     <div class="bg-light p-3 rounded">
                         {{ $transaction->notes }}
                     </div>
@@ -135,16 +135,16 @@
 
                 <div class="d-flex gap-2">
                     <a href="{{ route('transactions.index') }}" class="btn btn-secondary btn-modern">
-                        <i class="fas fa-arrow-left me-2"></i>Back to Transactions
+                        <i class="fas fa-arrow-left me-2"></i>Kembali ke Daftar Transaksi
                     </a>
                     @if($transaction->user)
                         <a href="{{ route('users.show', $transaction->user->id) }}" class="btn btn-primary btn-modern">
-                            <i class="fas fa-user me-2"></i>View User
+                            <i class="fas fa-user me-2"></i>Lihat Pengguna
                         </a>
                     @endif
                     @if($transaction->game)
                         <a href="{{ route('games.show', $transaction->game->id) }}" class="btn btn-success btn-modern">
-                            <i class="fas fa-gamepad me-2"></i>View Game
+                            <i class="fas fa-gamepad me-2"></i>Lihat Game
                         </a>
                     @endif
                 </div>

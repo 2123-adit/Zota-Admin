@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Games Management - ZOTA Admin')
-@section('page-title', 'Games Management')
+@section('title', 'Manajemen Game - ZOTA Admin')
+@section('page-title', 'Manajemen Game')
 
 @section('content')
 <div class="row">
@@ -11,12 +11,12 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-gamepad me-2 text-primary"></i>All Games
+                            <i class="fas fa-gamepad me-2 text-primary"></i>Semua Game
                         </h5>
                     </div>
                     <div class="col-auto">
                         <a href="{{ route('games.create') }}" class="btn btn-success btn-modern">
-                            <i class="fas fa-plus me-2"></i>Add New Game
+                            <i class="fas fa-plus me-2"></i>Tambah Game Baru
                         </a>
                     </div>
                 </div>
@@ -24,9 +24,9 @@
                 <div class="row mt-3">
                     <div class="col">
                         <form method="GET" class="d-flex gap-2">
-                            <input type="text" name="search" class="form-control" placeholder="Search games..." value="{{ request('search') }}">
+                            <input type="text" name="search" class="form-control" placeholder="Cari game..." value="{{ request('search') }}">
                             <select name="category_id" class="form-select">
-                                <option value="">All Categories</option>
+                                <option value="">Semua Kategori</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
@@ -34,9 +34,9 @@
                                 @endforeach
                             </select>
                             <select name="status" class="form-select">
-                                <option value="">All Status</option>
-                                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                <option value="">Semua Status</option>
+                                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Aktif</option>
+                                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
                             </select>
                             <button type="submit" class="btn btn-primary btn-modern">
                                 <i class="fas fa-search"></i>
@@ -51,11 +51,11 @@
                         <thead>
                             <tr>
                                 <th>Game</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Sales</th>
+                                <th>Kategori</th>
+                                <th>Harga</th>
+                                <th>Penjualan</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,7 +77,7 @@
                                         <div>
                                             <h6 class="mb-0">{{ $game->name }}</h6>
                                             @if($game->is_featured)
-                                                <span class="badge bg-warning text-dark">Featured</span>
+                                                <span class="badge bg-warning text-dark">Unggulan</span>
                                             @endif
                                         </div>
                                     </div>
@@ -87,9 +87,9 @@
                                 <td>{{ $game->transactions_count }}</td>
                                 <td>
                                     @if($game->is_active)
-                                        <span class="badge bg-success">Active</span>
+                                        <span class="badge bg-success">Aktif</span>
                                     @else
-                                        <span class="badge bg-danger">Inactive</span>
+                                        <span class="badge bg-danger">Tidak Aktif</span>
                                     @endif
                                 </td>
                                 <td>
@@ -104,7 +104,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('Are you sure?')">
+                                                    onclick="return confirm('Apakah Anda yakin?')">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>

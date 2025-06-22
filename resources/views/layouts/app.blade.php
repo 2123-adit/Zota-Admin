@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -247,7 +247,7 @@
                         <i class="fas fa-gamepad me-2"></i>ZOTA ADMIN
                     </div>
 
-                    <!-- Admin Info -->
+                    <!-- Informasi Admin -->
                     @auth('admin')
                     <div class="admin-info text-white">
                         <div class="d-flex align-items-center">
@@ -273,27 +273,27 @@
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link {{ Request::routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                                <i class="fas fa-tachometer-alt"></i>Command Center
+                                <i class="fas fa-tachometer-alt"></i>Pusat Kendali
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ Request::routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
-                                <i class="fas fa-users"></i>Players
+                                <i class="fas fa-users"></i>Pemain
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ Request::routeIs('games.*') ? 'active' : '' }}" href="{{ route('games.index') }}">
-                                <i class="fas fa-gamepad"></i>Game Library
+                                <i class="fas fa-gamepad"></i>Perpustakaan Game
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ Request::routeIs('topups.*') ? 'active' : '' }}" href="{{ route('topups.index') }}">
-                                <i class="fas fa-credit-card"></i>Wallet Top-ups
+                                <i class="fas fa-credit-card"></i>Top-up Dompet
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ Request::routeIs('transactions.*') ? 'active' : '' }}" href="{{ route('transactions.index') }}">
-                                <i class="fas fa-exchange-alt"></i>Transactions
+                                <i class="fas fa-exchange-alt"></i>Transaksi
                             </a>
                         </li>
                         
@@ -303,8 +303,8 @@
                             <form method="POST" action="{{ route('admin.logout') }}">
                                 @csrf
                                 <button type="submit" class="nav-link logout-btn text-start w-100 border-0 bg-transparent" 
-                                        onclick="return confirm('Are you sure you want to logout?')">
-                                    <i class="fas fa-sign-out-alt"></i>Logout
+                                        onclick="return confirm('Apakah Anda yakin ingin keluar?')">
+                                    <i class="fas fa-sign-out-alt"></i>Keluar
                                 </button>
                             </form>
                         </li>
@@ -312,15 +312,15 @@
                 </div>
             </nav>
 
-            <!-- Main content -->
+            <!-- Konten utama -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                <!-- Top navbar -->
+                <!-- Navbar atas -->
                 <nav class="navbar navbar-expand-lg navbar-light mb-4">
                     <div class="container-fluid">
-                        <h5 class="mb-0">@yield('page-title', 'Command Center')</h5>
+                        <h5 class="mb-0">@yield('page-title', 'Pusat Kendali')</h5>
                         <div class="d-flex align-items-center">
                             <div class="live-clock me-3" id="liveClock">
-                                <i class="fas fa-clock me-1"></i>Loading...
+                                <i class="fas fa-clock me-1"></i>Memuat...
                             </div>
                             @auth('admin')
                                 <div class="dropdown">
@@ -344,8 +344,8 @@
                                             <form method="POST" action="{{ route('admin.logout') }}">
                                                 @csrf
                                                 <button type="submit" class="dropdown-item text-danger" 
-                                                        onclick="return confirm('Are you sure you want to logout?')">
-                                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                                        onclick="return confirm('Apakah Anda yakin ingin keluar?')">
+                                                    <i class="fas fa-sign-out-alt me-2"></i>Keluar
                                                 </button>
                                             </form>
                                         </li>
@@ -356,7 +356,7 @@
                     </div>
                 </nav>
 
-                <!-- Alerts -->
+                <!-- Peringatan -->
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
@@ -371,7 +371,7 @@
                     </div>
                 @endif
 
-                <!-- Page Content -->
+                <!-- Konten Halaman -->
                 <div class="content">
                     @yield('content')
                 </div>
@@ -383,11 +383,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script>
-        // Real-time Clock
+        // Jam Real-time
         function updateClock() {
             const now = new Date();
             
-            // Format untuk Jakarta timezone
+            // Format untuk timezone Jakarta
             const options = {
                 timeZone: 'Asia/Jakarta',
                 year: 'numeric',
@@ -399,7 +399,7 @@
                 hour12: false
             };
             
-            const formatter = new Intl.DateTimeFormat('en-US', options);
+            const formatter = new Intl.DateTimeFormat('id-ID', options);
             const parts = formatter.formatToParts(now);
             
             const day = parts.find(part => part.type === 'day').value;
@@ -417,13 +417,13 @@
             }
         }
 
-        // Update clock immediately and then every second
+        // Perbarui jam segera dan kemudian setiap detik
         updateClock();
         setInterval(updateClock, 1000);
 
-        // Add some interactive effects
+        // Tambahkan beberapa efek interaktif
         document.addEventListener('DOMContentLoaded', function() {
-            // Smooth sidebar navigation
+            // Navigasi sidebar yang halus
             const navLinks = document.querySelectorAll('.sidebar .nav-link');
             navLinks.forEach(link => {
                 link.addEventListener('mouseenter', function() {

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Top-up Details - ZOTA Admin')
-@section('page-title', 'Top-up Details')
+@section('title', 'Detail Top-up - ZOTA Admin')
+@section('page-title', 'Detail Top-up')
 
 @section('content')
 <div class="row justify-content-center">
@@ -10,15 +10,15 @@
             <div class="card-header bg-white border-0">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-credit-card me-2 text-primary"></i>Top-up Request Details
+                        <i class="fas fa-credit-card me-2 text-primary"></i>Detail Permintaan Top-up
                     </h5>
                     <div>
                         @if($topup->status === 'pending')
-                            <span class="badge bg-warning px-3 py-2">Pending</span>
+                            <span class="badge bg-warning px-3 py-2">Tertunda</span>
                         @elseif($topup->status === 'approved')
-                            <span class="badge bg-success px-3 py-2">Approved</span>
+                            <span class="badge bg-success px-3 py-2">Disetujui</span>
                         @else
-                            <span class="badge bg-danger px-3 py-2">Rejected</span>
+                            <span class="badge bg-danger px-3 py-2">Ditolak</span>
                         @endif
                     </div>
                 </div>
@@ -27,35 +27,35 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-4">
-                            <h6>Request Information</h6>
+                            <h6>Informasi Permintaan</h6>
                             <table class="table table-borderless">
                                 <tr>
-                                    <td class="text-muted">Request ID:</td>
+                                    <td class="text-muted">ID Permintaan:</td>
                                     <td class="fw-bold">{{ $topup->request_id }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="text-muted">Amount:</td>
+                                    <td class="text-muted">Jumlah:</td>
                                     <td class="fw-bold text-success">Rp {{ number_format($topup->amount, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td class="text-muted">Status:</td>
                                     <td>
                                         @if($topup->status === 'pending')
-                                            <span class="badge bg-warning">Pending</span>
+                                            <span class="badge bg-warning">Tertunda</span>
                                         @elseif($topup->status === 'approved')
-                                            <span class="badge bg-success">Approved</span>
+                                            <span class="badge bg-success">Disetujui</span>
                                         @else
-                                            <span class="badge bg-danger">Rejected</span>
+                                            <span class="badge bg-danger">Ditolak</span>
                                         @endif
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-muted">Requested At:</td>
+                                    <td class="text-muted">Diminta Pada:</td>
                                     <td>{{ $topup->created_at->format('d M Y H:i:s') }}</td>
                                 </tr>
                                 @if($topup->processed_at)
                                 <tr>
-                                    <td class="text-muted">Processed At:</td>
+                                    <td class="text-muted">Diproses Pada:</td>
                                     <td>{{ $topup->processed_at->format('d M Y H:i:s') }}</td>
                                 </tr>
                                 @endif
@@ -64,7 +64,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="mb-4">
-                            <h6>User Information</h6>
+                            <h6>Informasi Pengguna</h6>
                             <div class="d-flex align-items-center">
                                 <div class="avatar-lg bg-primary rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <h4 class="text-white mb-0">{{ substr($topup->user->name, 0, 1) }}</h4>
@@ -72,7 +72,7 @@
                                 <div>
                                     <h5 class="mb-1">{{ $topup->user->name }}</h5>
                                     <p class="text-muted mb-1">{{ $topup->user->email }}</p>
-                                    <small class="text-muted">Current Balance: <span class="fw-bold text-success">Rp {{ number_format($topup->user->balance, 0, ',', '.') }}</span></small>
+                                    <small class="text-muted">Saldo Saat Ini: <span class="fw-bold text-success">Rp {{ number_format($topup->user->balance, 0, ',', '.') }}</span></small>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
 
                 @if($topup->notes)
                 <div class="mb-4">
-                    <h6>Notes</h6>
+                    <h6>Catatan</h6>
                     <div class="bg-light p-3 rounded">
                         {{ $topup->notes }}
                     </div>
@@ -91,14 +91,14 @@
                 <div class="d-flex gap-2">
                     @if($topup->status === 'pending')
                         <button class="btn btn-success btn-modern" data-bs-toggle="modal" data-bs-target="#approveModal">
-                            <i class="fas fa-check me-2"></i>Approve
+                            <i class="fas fa-check me-2"></i>Setujui
                         </button>
                         <button class="btn btn-danger btn-modern" data-bs-toggle="modal" data-bs-target="#rejectModal">
-                            <i class="fas fa-times me-2"></i>Reject
+                            <i class="fas fa-times me-2"></i>Tolak
                         </button>
                     @endif
                     <a href="{{ route('topups.index') }}" class="btn btn-secondary btn-modern">
-                        <i class="fas fa-arrow-left me-2"></i>Back to Top-ups
+                        <i class="fas fa-arrow-left me-2"></i>Kembali ke Daftar Top-up
                     </a>
                 </div>
             </div>
@@ -106,52 +106,52 @@
     </div>
 </div>
 
-<!-- Approve Modal -->
+<!-- Modal Setujui -->
 <div class="modal fade" id="approveModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST" action="{{ route('topups.approve', $topup->id) }}">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title">Approve Top-up Request</h5>
+                    <h5 class="modal-title">Setujui Permintaan Top-up</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to approve this top-up request for <strong>Rp {{ number_format($topup->amount, 0, ',', '.') }}</strong>?</p>
+                    <p>Apakah Anda yakin ingin menyetujui permintaan top-up sebesar <strong>Rp {{ number_format($topup->amount, 0, ',', '.') }}</strong>?</p>
                     <div class="mb-3">
-                        <label class="form-label">Notes (Optional)</label>
-                        <textarea name="notes" class="form-control" rows="3"></textarea>
+                        <label class="form-label">Catatan (Opsional)</label>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Masukkan catatan..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success">Approve</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Setujui</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Reject Modal -->
+<!-- Modal Tolak -->
 <div class="modal fade" id="rejectModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST" action="{{ route('topups.reject', $topup->id) }}">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title">Reject Top-up Request</h5>
+                    <h5 class="modal-title">Tolak Permintaan Top-up</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to reject this top-up request for <strong>Rp {{ number_format($topup->amount, 0, ',', '.') }}</strong>?</p>
+                    <p>Apakah Anda yakin ingin menolak permintaan top-up sebesar <strong>Rp {{ number_format($topup->amount, 0, ',', '.') }}</strong>?</p>
                     <div class="mb-3">
-                        <label class="form-label">Rejection Reason</label>
-                        <textarea name="notes" class="form-control" rows="3" required placeholder="Please provide a reason for rejection"></textarea>
+                        <label class="form-label">Alasan Penolakan</label>
+                        <textarea name="notes" class="form-control" rows="3" required placeholder="Harap berikan alasan penolakan"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Reject</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Tolak</button>
                 </div>
             </form>
         </div>
